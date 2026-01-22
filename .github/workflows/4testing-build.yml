@@ -36,7 +36,7 @@ jobs:
       env:
         SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_TOKEN }}
       with:
-        snap: onlyoffice-ds_${{ github.event.inputs.version }}_amd64.snap
+        snap: oo-mysql-5-7_${{ github.event.inputs.version }}_amd64.snap
         release: beta
 
     - name: Notice for revision
