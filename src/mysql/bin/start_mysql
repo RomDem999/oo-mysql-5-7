@@ -29,7 +29,8 @@ if [ $new_install = true ]; then
 	printf "Generating onlyoffice mysql password... "
 	onlyoffice_password="$(tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c64)"
 	# Save onlyoffice user password
-	sed -i -e "s#dbPass\": \"\([0-9A-Za-z_-]\+\)#dbPass\": \"${onlyoffice_password}#g" $SNAP_DATA/etc/onlyoffice/documentserver/local.json
+	#sed -i -e "s#dbPass\": \"\([0-9A-Za-z_-]\+\)#dbPass\": \"${onlyoffice_password}#g" $SNAP_DATA/etc/onlyoffice/documentserver/local.json
+	snapctl set onlyoffice.db-password="${onlyoffice_password}"
 	printf "done\n"
 
 	# Save root user information
@@ -52,7 +53,7 @@ if [ $new_install = true ]; then
 		CREATE DATABASE onlyoffice;
 		GRANT ALL PRIVILEGES ON onlyoffice.* TO 'onlyoffice'@'localhost' IDENTIFIED BY '$onlyoffice_password';
 		USE onlyoffice;
-		SOURCE /snap/onlyoffice-ds/current/var/www/onlyoffice/documentserver/server/schema/mysql/createdb.sql;
+		SOURCE $SNAP/schema/createdb.sql;
 		SQL
 	then
 		# Now the root mysql user has a password. Save that as well.

@@ -1,6 +1,7 @@
 #!/bin/sh
 
 if [ ! -f $SNAP_DATA/mysql/my.cnf ]; then
+    mkdir -p $SNAP_DATA/mysql
 	cp $SNAP/my.cnf $SNAP_DATA/mysql/my.cnf
 fi
 

@@ -153,6 +153,16 @@ parts:
     plugin: dump
     prime:
       - -*
+
   common:
     plugin: dump
     source: src/common/
+
+  schema:
+    plugin: nil
+    source: git@github.com:ONLYOFFICE/server.git
+    source-type: git
+    override-build: |
+      craftctl default
+      SCHEMA_DIR=$CRAFT_PART_INSTALL/schema
+      cp -r schema/mysql $SCHEMA_DIR
