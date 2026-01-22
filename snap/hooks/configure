@@ -1,0 +1,54 @@
+#!/bin/sh
+
+if [ ! -f $SNAP_DATA/mysql/my.cnf ]; then
+	cp $SNAP/my.cnf $SNAP_DATA/mysql/my.cnf
+fi
+
+DEFAULT_DB_PORT="3306"
+
+
+# onlyoffice.db-port
+
+db_onlyoffice_db_port()
+{
+	onlyoffice_db_port="$(onlyoffice_db_port)"
+	previous_onlyoffice_db_port="$(previous_onlyoffice_db_port)"
+
+	# If no changes were requested, then there's nothing to do here.
+	if [ "$onlyoffice_db_port" = "$previous_onlyoffice_db_port" ]; then
+		return 0
+	fi
+	set_onlyoffice_db_port "$onlyoffice_db_port"
+	set_previous_onlyoffice_db_port $onlyoffice_db_port
+	sed -i "s/port=.*/port="${onlyoffice_db_port}"/g" $SNAP_DATA/mysql/my.cnf
+	snapctl restart onlyoffice-ds.mysql
+}
+
+set_onlyoffice_db_port()
+{
+	snapctl set onlyoffice.db-port="$1"
+}
+
+onlyoffice_db_port()
+{
+	port="$(snapctl get onlyoffice.db-port)"
+	if [ -z "$port" ]; then
+		port="$DEFAULT_DB_PORT"
+		set_onlyoffice_db_port $port
+		set_previous_onlyoffice_db_port $port
+	fi
+
+	echo "$port"
+}
+
+previous_onlyoffice_db_port()
+{
+	snapctl get private.onlyoffice.db-port
+}
+
+set_previous_onlyoffice_db_port()
+{
+	snapctl set private.onlyoffice.db-port="$1"
+}
+
+db_onlyoffice_db_port

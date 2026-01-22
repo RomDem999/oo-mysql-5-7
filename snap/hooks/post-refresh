@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -R $SNAP_DATA/mysql
