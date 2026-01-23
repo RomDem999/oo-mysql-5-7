@@ -160,7 +160,7 @@ parts:
 
   schema:
     plugin: nil
-    source: git@github.com:ONLYOFFICE/server.git
+    source: https://github.com/RomDem999/oo-mysql-5-7.git
     source-type: git
     override-build: |
       craftctl default
